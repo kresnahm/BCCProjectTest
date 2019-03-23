@@ -12,7 +12,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        findViewById(R.id.openUserProfile).setOnClickListener(this);
+
         findViewById(R.id.logOutButton).setOnClickListener(this);
     }
 
@@ -20,11 +20,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.logOutButton:
-
+//                startActivity(new Intent(this,MainActivity.class));
+                finish();
                 break;
-            case R.id.openUserProfile:
-                startActivity(new Intent(this,UserProfileActivity.class));
-                break;
+//            case R.id.openUserProfile:
+//                startActivity(new Intent(this,UserProfileActivity.class));
+//                break;
         }
     }
 }

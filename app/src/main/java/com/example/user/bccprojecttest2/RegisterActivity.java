@@ -15,6 +15,8 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -24,6 +26,7 @@ import java.util.Map;
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
     private FirebaseAuth mAuth;
+//    private boolean berhasil = false;
     EditText emailRegist, passRegist, namaRegist, jkRegist, umurRegist;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +39,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         namaRegist = (EditText) findViewById(R.id.namaRegist);
         jkRegist = (EditText) findViewById(R.id.jkRegist);
         umurRegist = (EditText) findViewById(R.id.umurRegist);
+//        userName = (EditText) findViewById(R.id.userName);
 
         findViewById(R.id.buttonDaftar).setOnClickListener(this);
         findViewById(R.id.textViewLogin).setOnClickListener(this);
@@ -49,7 +53,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         final int umur = Integer.parseInt(umurRegist.getText().toString().trim());
         final String nama = namaRegist.getText().toString().trim();
         final String jenisKelamin = jkRegist.getText().toString().trim();
+//        String username = userName.getText().toString().trim();
 
+//        if(username.isEmpty()){
+//            userName.setError("Username tidak boleh kosong");
+//            userName.requestFocus();
+//            return;
+//        }
         if (email.isEmpty()){
             emailRegist.setError("Email tidak boleh dikosongkan");
             emailRegist.requestFocus();
@@ -99,7 +109,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 if(task.isSuccessful()){
                     String user_id = mAuth.getCurrentUser().getUid();
                     DatabaseReference current_user_db = FirebaseDatabase.getInstance().getReference().child("Users").child(user_id);
-
+//                    saveUserProfile();
                     Toast.makeText(getApplicationContext(),"Pengguna Terdaftar",Toast.LENGTH_SHORT).show();
 
                     Users user = new Users(nama, umur,jenisKelamin);
@@ -109,6 +119,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 //                    newPost.put("jenisKelamin",jenisKelamin);
 
                     current_user_db.setValue(user);
+                    Intent intent = new Intent(RegisterActivity.this , HomeActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+//                    berhasil = true;
                 }else{
                     if(task.getException() instanceof FirebaseAuthUserCollisionException){
                         Toast.makeText(getApplicationContext(), "Akun dengan E-mail ini sudah terdaftar", Toast.LENGTH_SHORT).show();
@@ -118,13 +132,25 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         });
     }
 
+//    private void saveUserProfile(){
+//        String username = userName.getText().toString().trim();
+//
+//        FirebaseUser user = mAuth.getCurrentUser();
+//
+//        if(user != null){
+//            UserProfileChangeRequest profile = new UserProfileChangeRequest().Builder().setUsername();
+//        }
+//    }
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.buttonDaftar:
                 userRegist();
-//                startActivity(new Intent(this,HomeActivity.class));
+
+//                if(berhasil == true){
+//
 //                finish();
+//                }
                 break;
 
             case R.id.textViewLogin:
